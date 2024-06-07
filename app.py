@@ -18,6 +18,7 @@ def index():
 
 @app.route('/convert', methods=['POST'])
 def convert_ppt_to_video():
+    print("Request received for conversion of ppt ")
     file = request.files['file']
     if not file:
         return jsonify({"error": "No file provided"}), 400
@@ -37,11 +38,13 @@ def convert_ppt_to_video():
     audio_files = []
     for i, slide in enumerate(prs.slides):
         # Save slide as image
+        print("Extracting Slide Images from the ppt")
         slide_image_path = os.path.join(media_dir, f"slide_{i}.png")
         save_slide_as_image(ppt_file_path, i, slide_image_path)
         image_files.append(slide_image_path)
 
         # Extract notes text
+        print("Extracting Text from the ppt")
         notes_text = ''
         if slide.notes_slide and slide.notes_slide.notes_text_frame:
             notes_text = slide.notes_slide.notes_text_frame.text.strip()
@@ -56,6 +59,7 @@ def convert_ppt_to_video():
             audio_files.append(None)  # Append None if there's no audio
 
     # Create video clips for each slide
+        print("Creating video clips for each slide...")
     video_clips = []
     for img_file, audio_file in zip(image_files, audio_files):
         img_clip = ImageClip(img_file)
@@ -69,6 +73,7 @@ def convert_ppt_to_video():
         video_clips.append(video_clip)
 
     # Concatenate video clips
+        print("concatinating audio-Video file...")
     final_video = concatenate_videoclips(video_clips, method="compose")
     output_video_path = os.path.join('static', 'output_video.mp4')
     final_video.write_videofile(output_video_path, fps=24)
@@ -86,6 +91,7 @@ def convert_ppt_to_video():
     return jsonify({"video_url": url_for('static', filename='output_video.mp4')})
 
 def save_slide_as_image(ppt_file_path, slide_index, output_image_path):
+    print("Saving Video...")
     # Initialize COM library
     pythoncom.CoInitialize()
     try:
