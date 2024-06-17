@@ -105,6 +105,3 @@ def save_slide_as_image(ppt_file_path, slide_index, output_image_path):
     finally:
         powerpoint.Quit()
         pythoncom.CoUninitialize()
-
-if __name__ == "__main__":
-    app.run(debug=True)
