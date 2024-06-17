@@ -1,3 +1,6 @@
+# Conditional dependency for Windows
+pywin32==306; sys_platform == 'win32'
+
 blinker==1.8.2
 certifi==2024.6.2
 charset-normalizer==3.3.2
